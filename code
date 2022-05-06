@@ -1,0 +1,65 @@
+class BasePasswordManager:
+  def __init__(self,old_passwords=[" "]):
+    self.old_passwords=old_passwords
+    
+  def get_password(self):
+    #print("previous password: ",self.old_passwords[-1])
+    return self.old_passwords[-1]
+    
+  def is_correct(self,entered_password):
+    if self.old_passwords[-1]==entered_password:
+      return True
+    else:
+      return False
+
+class PasswordManager(BasePasswordManager):
+        
+    def set_password(self,entered_password):
+      a=self.get_level(entered_password)
+      print("Stength of entered password:", a)
+      b=self.get_level(self.get_password())
+      print("Strength of current password: ",b)
+      if b==None:
+        b=-1
+      if b==2 and a==2:
+        if self.is_correct(entered_password):
+          print("ENTERED PASSWORD IS SAME AS THE EXISTING PASSWORD!!!")
+          print("---------------------------------------------------------------------------------\n\n")
+        else: 
+          self.old_passwords.append(entered_password)
+          print("PASSWORD SET SUCCESSFULLY!!!")
+          print("---------------------------------------------------------------------------------\n\n")
+      elif len(entered_password)>=6 and a>b:
+        self.old_passwords.append(entered_password)
+        print("PASSWORD SET SUCCESSFULLY!!!")
+        print("---------------------------------------------------------------------------------\n\n")
+      else:
+        print("THE PASSWORD MUST BE MINIMUM OF 6 CHARACTERS AND STRONGER THAN THE PREVIOUS PASSWORD!!!!")
+        print("---------------------------------------------------------------------------------\n\n")
+    
+    def get_level(self,entered_password):
+        if entered_password.isalpha() or entered_password.isnumeric():
+          return 0
+        elif entered_password.isalnum():
+          return 1
+        else:
+          special_characters = """#$!%^&*()@-+?_=,</>"""
+          if any(c in special_characters for c in entered_password):
+            return 2
+            
+
+print("-------------------------------------------------------------------------------------")
+print("--------------------------------PASSWORD MANAGER-------------------------------------")
+print("-------------------------------------------------------------------------------------\n\n")
+ob=PasswordManager() 
+user_name=input('Enter your username: ')  
+while (True):
+  entered_password=input("Enter your password: ")
+  ob.set_password(entered_password)
+  f=input("do you want to continue? y/n  ")
+  if(f=="n"):
+    break
+  elif(f=="y"):
+    continue
+  else:
+    print("INVALID COMMAND!!!\n")
